@@ -58,7 +58,14 @@ cmd+opt+t   表格
 
 ## git常用命令
 
+`git config --list`  设置账户信息
+`git config --global user.name 'allsun'`
+`git config --global user.email '869472104@qq.com'` 
+
 `git init `
+
+工作区、暂存区、版本库
+理解为什么要有暂存区：1.可以针对专门任务统一提交，如都是修bug，然后一起提交；2.
 
 `git add`
 
