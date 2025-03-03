@@ -65,11 +65,19 @@ cmd+opt+t   表格
 `git init `
 
 工作区、暂存区、版本库
-理解为什么要有暂存区：1.可以针对专门任务统一提交，如都是修bug，然后一起提交；2.
+理解为什么要有暂存区：1.可以针对专门任务统一提交，如都是修bug，然后一起提交；2.批量提交想要修改的文件；3.工作区文件变更，想恢复成暂存区的内容，暂存区相当于变成了历史快照，`git restore 文件名`
+
+`git rm --cached 文件名`  删除暂存区的更改
 
 `git add`
 
+`git status -s` 查看文件状态
+
 `git commit -m "变更内容"`    本地仓提交
+
+`git log --oneline`提交历史记录
+
+`git reset --hard 版本号` 还有soft、mixed模式
 
 `git remote add origin https://github.com/AllSun/note.git`   与远程仓库进行关联
 
