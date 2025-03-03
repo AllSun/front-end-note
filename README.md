@@ -109,6 +109,11 @@ cmd+opt+t   表格
 
 `git push`
 
+**理解merge和rebase**
+
+- merge保留分支合并后创建新的提交，rebase合并成一条主线
+- 
+
 # HTML+CSS
 
 ## 常用html标签
