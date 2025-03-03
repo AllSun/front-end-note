@@ -75,19 +75,37 @@ cmd+opt+t   表格
 
 `git commit -m "变更内容"`    本地仓提交
 
+`git ls-files`查看暂存区文件列表
+
+`git reflog --online`查看完整历史
+
 `git log --oneline`提交历史记录
 
 `git reset --hard 版本号` 还有soft、mixed模式
 
+`git branch 分支名`创建分支
+
+`git merge 分支名`先要切换为要合并的分支，一般切换为master
+
+**合并发生冲突时，手动解决冲突，再commit提交后才能继续使用**
+
+`git branch -d 分支名`合并完就删除
+
+![image-20250303103634267](/Users/AllSun/Library/Application Support/typora-user-images/image-20250303103634267.png)
+
+**master原先是C5，合并了新的提交后移动到C10,但是原C5的节点有新的分支，再合并的时候会自动产生C11节点**
+
+`git checkout 分支名`head指针切换到该分支，head指针影响暂存区和工作区的代码
+
 `git remote add origin https://github.com/AllSun/note.git`   与远程仓库进行关联
 
-`git remote remove origin`
+`git remote remove origin`删除远程仓库
 
 `git push --set -upstream origin master  `    关联上游分支
 
-`git config pull rebase true`  变基拉取，先将远程仓应用于本地分支，然后再将本地仓提交进行合并
+`git pull --rebase`  远程分支和本地分支没有关联关系的合并
 
-`git pull`
+`git pull`  git pull 远程仓库名 远程分支名：本地分支名
 
 `git push`
 
