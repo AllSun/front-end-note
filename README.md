@@ -75,9 +75,9 @@ cmd+opt+t   表格
 
 `git commit -m "变更内容"`    本地仓提交
 
-`git ls-files`查看暂存区文件列表
+`git ls-files`查看被追踪的文件
 
-`git reflog --online`查看完整历史
+`git reflog --oneline`查看完整历史
 
 `git log --oneline`提交历史记录
 
@@ -86,6 +86,13 @@ cmd+opt+t   表格
 `git branch 分支名`创建分支
 
 `git merge 分支名`先要切换为要合并的分支，一般切换为master
+
+`git rebase 分支名`变基合并
+
+**理解merge和rebase**
+
+- merge保留分支合并后创建新的提交，rebase合并成一条主线
+- 两种不同合并模式
 
 **合并发生冲突时，手动解决冲突，再commit提交后才能继续使用**
 
@@ -109,10 +116,7 @@ cmd+opt+t   表格
 
 `git push`
 
-**理解merge和rebase**
 
-- merge保留分支合并后创建新的提交，rebase合并成一条主线
-- 
 
 # HTML+CSS
 
@@ -1009,12 +1013,18 @@ v-model.number
 @click.prevent  阻止默认行为
 ~~~
 
-### Vue实例
+### Vue实例属性
 
-#### data
+#### data/computed/methods/watch/props
+
+#### 生命周期函数8个：created/mounted/
+
+
 
 ```javascript
 data属性
+
+
 computed 和method的区别，computed可以缓存结果，如果依赖项值变化了，会自动重新计算
 完整写法，默认只提供 get() ，需自定义 set(value),提供了set方法，methods中函数调用才能够修改computed中的属性值
 理解data属性和计算属性，计算属性是基于data属性加工而来
