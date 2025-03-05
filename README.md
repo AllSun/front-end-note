@@ -1017,17 +1017,31 @@ v-model.number
 
 #### data/computed/methods/watch/props
 
-#### 生命周期函数8个：created/mounted/
-
-
-
 ```javascript
 data属性
-
-
 computed 和method的区别，computed可以缓存结果，如果依赖项值变化了，会自动重新计算
-完整写法，默认只提供 get() ，需自定义 set(value),提供了set方法，methods中函数调用才能够修改computed中的属性值
-理解data属性和计算属性，计算属性是基于data属性加工而来
+完整写法，默认只提供 get() ，需自定义 set(value),提供了set方法，才能够修改computed中的属性值
+不需要在 methods 里手动调用 computed 的 set 方法，因为 Vue 会在你修改计算属性时自动触发 set
+data() {
+    return {
+      firstName: "John",
+      lastName: "Doe"
+    };
+  },
+  computed: {
+    fullName: {
+      get() {
+        return this.firstName + " " + this.lastName;
+      },
+      set(newValue) {
+        const names = newValue.split(" ");
+        this.firstName = names[0];
+        this.lastName = names[1] || "";
+      }
+    }
+  }
+
+理解data属性和计算属性，计算属性是基于data属性加工而来，都是一个值
 computed 属性是基于 data 属性或者 props 来计算值的，但它也可以基于其他计算得到的值，或者基于外部的数据
 例如
 computed: {
@@ -1037,21 +1051,25 @@ computed: {
     }
   }
 
-watch 简单写法
+watch 简单写法，可以监听data、computed/vue组件的props变化
 完整写法
-deep:true,
+deep:true,   深度监听数组及对象内部属性
+-------
 immediate:true,//一进页面立刻执行一次
 handler(){
-
+  //立即执行函数
 }
 
 
 vue的生命周期（共8个钩子函数）
-created 初始化渲染---应用场景，一打开界面初始化渲染数据  常用
-mounted 操作dom---应用场景，一进界面，获取焦点     常用
-beforeDestroy 释放vue以外的资源（清除定时器、延时器）  常用
-beforeUpdate 数据修改，视图未更新
+beforeCreate 实例创建，data/methods都未初始化，不能访问data等属性
+created data/methods初始化完成，可访问，但未挂载到dom节点，适合初始化数据
+beforeMount 模板编译完成，虚拟dom创建完成
+mounted 挂载到dom节点，可以操作dom---应用场景，一进界面，获取焦点     常用
+beforeUpdate 数据修改，视图未更新，期间可以添加逻辑处理
 Updated 数据修改，视图已更新
+beforeDestroy data等属性可以访问，释放vue以外的资源（清除定时器、延时器）  常用
+destroyed 组件注销，this.el仍然可以访问，但不具备响应式
 
 模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
 
@@ -1288,6 +1306,29 @@ $store.commit('模块名/xxx'，额外参数)
 mapMutations('模块名',['xxx'])
 $store.dispatch('模块名/xxx'，额外参数)
 mapActions('模块名',['xxx'])
+```
+
+
+
+#### 生命周期函数8个：created/mounted/updated/destroyed
+
+```vue
+vue的生命周期（共8个钩子函数）
+created 初始化渲染---应用场景，一打开界面初始化渲染数据  常用
+mounted 操作dom---应用场景，一进界面，获取焦点     常用
+beforeDestroy 释放vue以外的资源（清除定时器、延时器）  常用
+beforeUpdate 数据修改，视图未更新
+Updated 数据修改，视图已更新```
+
+模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
+```
+
+
+
+
+
+```javascript
+
 
 ```
 
