@@ -1013,9 +1013,24 @@ v-model.number
 @click.prevent  阻止默认行为
 ~~~
 
+#### v-model的语法糖
+
+~~~javascript
+例如在 input输入框上，是value属性和input属性的合写，提供数据双向绑定
+<input v-model="msg" type="text">
+<input :value:"msg" @input="msg = $event.target.value" type="text">
+
+表单类组件封装（注意是组件，非input等标签）v-model无法使用props父传子的属性进行绑定，因此要使用$emit进行更新，需要将v-model拆解使用  
+父组件  @input="selectId = $event"  子组件 props属性名应为value $emit事件名应为 input ,父组件才能直接使用v-model
+~~~
+
+![image-20250306172726091](/Users/AllSun/Library/Application Support/typora-user-images/image-20250306172726091.png)
+
+![image-20250306172628823](/Users/AllSun/Library/Application Support/typora-user-images/image-20250306172628823.png)
+
 ### Vue实例属性
 
-#### data/computed/methods/watch/props
+#### data/computed/methods/watch
 
 ```javascript
 data属性
@@ -1061,44 +1076,11 @@ handler(){
 }
 
 
-vue的生命周期（共8个钩子函数）
-beforeCreate 实例创建，data/methods都未初始化，不能访问data等属性
-created data/methods初始化完成，可访问，但未挂载到dom节点，适合初始化数据
-beforeMount 模板编译完成，虚拟dom创建完成
-mounted 挂载到dom节点，可以操作dom---应用场景，一进界面，获取焦点     常用
-beforeUpdate 数据修改，视图未更新，期间可以添加逻辑处理
-Updated 数据修改，视图已更新
-beforeDestroy data等属性可以访问，释放vue以外的资源（清除定时器、延时器）  常用
-destroyed 组件注销，this.el仍然可以访问，但不具备响应式
-
-模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
 
 
-vue的生命周期仅针对挂载的dom节点，vue实例优先创建于被挂载的dom，其余dom优先加载
-
-components组件注册
-组件的概念，main.js是入口，导入vue、APP.vue根组件，渲染加载然后挂载到dom节点
-结构 App.vue中template只能有一个div根元素
-样式 scoped,作用于当前组件，原理，所有dom结构都加上了 ‘data-v-哈希值’，css选择默认添加
-逻辑  data必需是函数，保证每个组件实例创建的数据都是独立的
 
 
-普通组件：
-局部注册,只能在注册内的组件内使用 components:{组件名:组件对象}
-全局注册，所有组件内都能使用，在main.js中注册  Vue.component(组件名，组件对象)
 
-异步组件
-用于懒加载
-
-组件通信
-父子关系 父组件通过props传递数据、子组件通过$emit更新、props校验（type、require、default、validator()）、单向数据流
-非父子关系  provide & inject,eventbus
-非父子关系  event bus 1.创建一个空的eventbus vue实例；2.A监听event bus 实例的事件 Bus.$on(eventName,回调函数)；3.B组件触发 Bus.$emit(eventName,'')
-跨层级（孙子）：爷爷provide，将data中的属性共享  孙子inject   简单类型 非响应式，复杂类型  响应式
-兜底方案  vuex
-
-表单类组件封装和 v-model拆解绑定数据，子组件和父组件的双向绑定
-v-model无法使用props父传子的属性进行绑定，因此要使用$emit进行更新，需要将v-model拆解使用  父组件  @input="selectId = $event"  子组件 props属性名应为value $emit事件名应为 input ,父组件才能直接使用v-model
 
 .sync修饰符  实现父子组件的数据双向绑定，可自定义属性名 :visible.sync="isShow"  等于  :visible="isShow" @update:visible="isShow = $event" / 子组件 this.emit('update:visible',false)
 
@@ -1310,27 +1292,76 @@ mapActions('模块名',['xxx'])
 
 
 
-#### 生命周期函数8个：created/mounted/updated/destroyed
-
-```vue
-vue的生命周期（共8个钩子函数）
-created 初始化渲染---应用场景，一打开界面初始化渲染数据  常用
-mounted 操作dom---应用场景，一进界面，获取焦点     常用
-beforeDestroy 释放vue以外的资源（清除定时器、延时器）  常用
-beforeUpdate 数据修改，视图未更新
-Updated 数据修改，视图已更新```
-
-模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
-```
-
-
-
-
+#### 生命周期函数
 
 ```javascript
+vue的生命周期（共8个钩子函数）
+beforeCreate 实例创建，data/methods都未初始化，不能访问data等属性
+created data/methods初始化完成，可访问，但未挂载到dom节点，适合初始化数据
+beforeMount 模板编译完成，虚拟dom创建完成
+mounted 挂载到dom节点，可以操作dom---应用场景，一进界面，获取焦点     常用
+beforeUpdate 数据修改，视图未更新，期间可以添加逻辑处理
+Updated 数据修改，视图已更新
+beforeDestroy data等属性可以访问，释放vue以外的资源（清除定时器、延时器）  常用
+destroyed 组件注销，this.el仍然可以访问，但不具备响应式
+
+模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
 
 
+vue的生命周期仅针对挂载的dom节点，vue实例优先创建于被挂载的dom，其余dom优先加载
 ```
+
+### 组件
+
+~~~javascript
+components组件注册
+组件的概念，main.js是入口，导入vue、APP.vue根组件，渲染加载然后挂载到dom节点
+结构 App.vue中template只能有一个div根元素
+样式 scoped,作用于当前组件，原理，所有dom结构都加上了 ‘data-v-哈希值’，css选择默认添加
+逻辑  data必需是函数，保证每个组件实例创建的数据都是独立的
+
+
+普通组件：
+局部注册,只能在注册内的组件内使用 components:{组件名:组件对象}
+全局注册，所有组件内都能使用，在main.js中注册  Vue.component(组件名，组件对象)
+const app = createApp(App);
+
+// 全局注册组件
+app.component('ChildComponent', ChildComponent);
+
+异步组件
+用于懒加载
+
+~~~
+
+#### 组件通信
+
+~~~javascript
+组件通信
+父子关系 父组件通过props传递数据、子组件通过$emit更新、props校验（type、require、default、validator()）、单向数据流
+
+非父子关系 
+第一种provide & inject---简单类型 非响应式，复杂类型  响应式
+//数据源
+provide() {
+    return {
+      globalMessage: "Hello from Provide!" // 提供数据
+    };
+  }
+//数据接收
+inject: ["globalMessage"] // 注入祖先组件提供的数据
+第二种 eventbus(vue2)   mitt(vue3)
+非父子关系  event bus 1.创建一个空的eventbus vue实例；2.A监听event bus 实例的事件 Bus.$on(eventName,回调函数)；3.B组件触发 Bus.$emit(eventName,'')
+beforeDestroy() {
+    Bus.$off("custom-event"); // 避免内存泄漏
+  }
+
+跨层级（孙子）：爷爷provide，将data中的属性共享  孙子inject---简单类型 非响应式，复杂类型  响应式
+
+兜底方案  vuex(vue2)    pina(vue3)
+~~~
+
+
 
 ## 项目如何运行
 
