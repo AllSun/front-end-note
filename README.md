@@ -944,8 +944,6 @@ Man.prototype.Swimming = function (){}
 const allsun = new Man('allsun',30)
 ```
 
-# 
-
 # Vue2学习
 
 ## 本次常见JS方法整理
@@ -961,35 +959,6 @@ join('、')
 this.$router.push(`/search?key=${this.inputValue}`)
 axios.get/set/delete
 
-~~~
-
-## 防抖代码
-
-~~~javascript
-以下代码为防抖优化，反复记忆写一遍
-watch: {
-          // 该方法会在数据变化时调用执行
-          // newValue新值, oldValue老值（一般不用）
-          // words (newValue) {
-          //   console.log('变化了', newValue)
-          // }
-
-          'obj.words' (newValue) {
-            // console.log('变化了', newValue)
-            // 防抖: 延迟执行 → 干啥事先等一等，延迟一会，一段时间内没有再次触发，才执行
-            clearTimeout(this.timer)
-            this.timer = setTimeout(async () => {
-              const res = await axios({
-                url: 'https://applet-base-api-t.itheima.net/api/translate',
-                params: {
-                  words: newValue
-                }
-              })
-              this.result = res.data.data
-              console.log(res.data.data)
-            }, 300)
-          }
-        }
 ~~~
 
 ## Vue2语法
@@ -1011,6 +980,35 @@ v-model.trim
 v-model.number
 @click.stop
 @click.prevent  阻止默认行为
+~~~
+
+#### 自定义指令
+
+~~~javascript
+自定义指令：封装一些dom操作,指令的值通过binding.value传递
+全局注册 
+Vue.directive('指令名'，{
+  "inserted"(el){
+    //el指令所绑定的元素
+    el.focus()
+  }
+})
+局部注册
+directives:{
+  "指令名":{
+    //插入dom，执行自动获取焦点
+    inserted(el){
+      el.focus()
+    }
+    //更新时触发
+    update(el,binding){
+      el.style.color = binding.value
+    }
+  }
+}
+调用  <input v-指令名 type>  当前元素被插入到页面中时，调用函数
+应用场景：v-loading  页面加载的时候显示加载图标，使用伪类添加蒙层
+
 ~~~
 
 #### v-model的语法糖
@@ -1079,110 +1077,13 @@ handler(){
 
 
 
-
-
-
-.sync修饰符  实现父子组件的数据双向绑定，可自定义属性名 :visible.sync="isShow"  等于  :visible="isShow" @update:visible="isShow = $event" / 子组件 this.emit('update:visible',false)
-
 querySelector()  查找的是整个页面
 ref=属性名 ，渲染完成之后 使用this.$ref.ref属性名 查找的是当前组件，除了获取dom 也可以获取 组件实例，调用组件的方法  this.$ref.baseForm.resetValue()
 
 vue是异步dom更新队列，使用$nextTick，等dom更新完，才会触发才此方法里的函数体
 
-自定义指令：封装一些dom操作,指令的值通过binding.value传递
-全局注册 
-Vue.directive('指令名'，{
-  "inserted"(el){
-    //el指令所绑定的元素
-    el.focus()
-  }
-})
-局部注册
-directives:{
-  "指令名":{
-    inserted(el){
-      el.focus()
-    }
-    //更新时触发
-    update(el,binding){
-      el.style.color = binding.value
-    }
-  }
-}
-调用  <input v-指令名 type>  当前元素被插入到页面中时，调用函数
-应用场景：v-loading  页面加载的时候显示加载图标，使用伪类添加蒙层
 
-插槽：组件内部结构的自定义；后备内容（默认值）
-<slot>这句话是默认内容</slot>  占位封装
-默认插槽：只能定制一个位置
-具名插槽：多个slot ,使用name属性区分
-<slot name='head'>
-<slot name="content">
-使用
-<template v-slot:head>或者<template #head>
-大标题
-</template>
-作用域插槽（传参）,添加属性传值,本质上给插槽绑定数据，供组件使用
-<slot :row="item" msg="测试文本"></slot>
-调用传参
-<template #default="obj">
-  <button @click="del(obj.row.id)"></button>  
-</template>
 
-单页应用程序（SPA）点击导航不重新加载跳转  SEO差，页面按需更新
-多页：点击导航会重新加载跳转              SEO优
-
-路由：访问路径和组件的对应关系，步骤5+2  router-view
-router-link 提供高亮类名： router-link-extra-active/router-link-active(模糊匹配，用的多)，可以给这两个类名配置别名
-
-路由404、重定向
-const route = new VueRouter({
-  routes:[
-    { path: '/',redirect: '/home'}
-    { name:'路由名', path: '/home',component: Home}
-    { path: '*',component: NotFound}
-  ],
-  mode:"history"
-})
-
-<router-link to='/my'>
-
-声明式导航 跳转传参
-1、查询参数传参
-路径传递  'to=/path?参数名1=值&参数名2=值'    接收  $route.query.参数名  适合多个参数
-2.动态路由传参  参数可选符'?',表示该参数非必填
-配置路由 path:'/search/:words'  配置导航 to='/path/参数值'  接收 $route.params.参数名  适合传单个参数
-编程式导航（js跳转）
-1.path路径跳转 路由传参
-this.$router.push('/路径/参数名1=参数值1？参数名2=参数值2')
-this.$router.push({
-  path:'路径'，
-  query: {
-    参数名: '参数值'
-  }
-})
-this.$router.push('/路径/参数值')
-this.$router.push({
-  path:'路径/参数值'
-})
-
-2.name命名路由跳转（适合path路径长的场景）
-this.$router.push({
-  name: '路由名',
-  query: {
-    参数名:'参数值'
-  }
-})
-this.$router.push({
-  name: '路由名',
-  params: {
-    参数名:'参数值'
-  }
-})
-
-路由模式
-hash（默认，地址带'#'号）
-history(常用，需服务器端支持,后台配置访问规则)
 
 
 vuex:管理vue多组件共享的数据，多个组件共同维护一份数据，响应式变化，单向数据流，组件中不能直接修改
@@ -1358,10 +1259,92 @@ beforeDestroy() {
 
 跨层级（孙子）：爷爷provide，将data中的属性共享  孙子inject---简单类型 非响应式，复杂类型  响应式
 
+.sync修饰符  实现父子组件的数据双向绑定，可自定义属性名 :visible.sync="isShow"  等于  :visible="isShow" @update:visible="isShow = $event" / 子组件 this.emit('update:visible',false)
+
 兜底方案  vuex(vue2)    pina(vue3)
 ~~~
 
+#### 插槽
 
+~~~javascript
+插槽：组件内部结构的自定义；后备内容（默认值）
+<slot>这句话是默认内容</slot>  占位封装
+默认插槽：只能定制一个位置
+具名插槽：多个slot ,使用name属性区分
+<slot name='head'>
+<slot name="content">
+使用
+<template v-slot:head>或者<template #head>
+大标题
+</template>
+作用域插槽（传参）,添加属性传值,本质上给插槽绑定数据，供组件使用
+<slot :row="item" msg="测试文本"></slot>
+调用传参
+<template #default="obj">
+  <button @click="del(obj.row.id)"></button>  
+</template>
+~~~
+
+## Vue路由
+
+~~~javascript
+单页应用程序（SPA）点击导航不重新加载跳转  SEO差，页面按需更新
+多页：点击导航会重新加载跳转              SEO优
+
+路由：访问路径和组件的对应关系，步骤5+2  router-view
+router-link 提供高亮类名： router-link-extra-active/router-link-active(模糊匹配，用的多)，可以给这两个类名配置别名
+
+路由404、重定向
+const route = new VueRouter({
+  routes:[
+    { path: '/',redirect: '/home'}
+    { name:'路由名', path: '/home',component: Home}
+    { path: '*',component: NotFound}
+  ],
+   linkActiveClass: "my-active", // 修改 router-link-active 的名称
+  linkExactActiveClass: "my-exact-active"， // 修改 router-link-exact-active 的名称
+  mode:"history"
+})
+
+<router-link to='/my'>
+
+声明式导航 跳转传参
+1、查询参数传参
+路径传递  'to=/path?参数名1=值&参数名2=值'    接收  $route.query.参数名  适合多个参数
+2.动态路由传参  参数可选符'?',表示该参数非必填
+配置路由 path:'/search/:words'  配置导航 to='/path/参数值'  接收 $route.params.参数名  适合传单个参数
+编程式导航（js跳转）
+1.path路径跳转 路由传参
+this.$router.push('/路径/参数名1=参数值1？参数名2=参数值2')
+this.$router.push({
+  path:'路径'，
+  query: {
+    参数名: '参数值'
+  }
+})
+this.$router.push('/路径/参数值')
+this.$router.push({
+  path:'路径/参数值'
+})
+
+2.name命名路由跳转（适合path路径长的场景）
+this.$router.push({
+  name: '路由名',
+  query: {
+    参数名:'参数值'
+  }
+})
+this.$router.push({
+  name: '路由名',
+  params: {
+    参数名:'参数值'
+  }
+})
+
+路由模式
+hash（默认，地址带'#'号）
+history(常用，需服务器端支持,后台配置访问规则)
+~~~
 
 ## 项目如何运行
 
