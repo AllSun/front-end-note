@@ -1082,10 +1082,84 @@ ref=属性名 ，渲染完成之后 使用this.$ref.ref属性名 查找的是当
 
 vue是异步dom更新队列，使用$nextTick，等dom更新完，才会触发才此方法里的函数体
 
+```
 
 
 
+#### 生命周期函数
 
+```javascript
+vue的生命周期（共8个钩子函数）
+beforeCreate 实例创建，data/methods都未初始化，不能访问data等属性
+created data/methods初始化完成，可访问，但未挂载到dom节点，适合初始化数据
+beforeMount 模板编译完成，虚拟dom创建完成
+mounted 挂载到dom节点，可以操作dom---应用场景，一进界面，获取焦点     常用
+beforeUpdate 数据修改，视图未更新，期间可以添加逻辑处理
+Updated 数据修改，视图已更新
+beforeDestroy data等属性可以访问，释放vue以外的资源（清除定时器、延时器）  常用
+destroyed 组件注销，this.el仍然可以访问，但不具备响应式
+
+模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
+
+
+vue的生命周期仅针对挂载的dom节点，vue实例优先创建于被挂载的dom，其余dom优先加载
+```
+
+### 组件
+
+~~~javascript
+components组件注册
+组件的概念，main.js是入口，导入vue、APP.vue根组件，渲染加载然后挂载到dom节点
+结构 App.vue中template只能有一个div根元素
+样式 scoped,作用于当前组件，原理，所有dom结构都加上了 ‘data-v-哈希值’，css选择默认添加
+逻辑  data必需是函数，保证每个组件实例创建的数据都是独立的
+
+
+普通组件：
+局部注册,只能在注册内的组件内使用 components:{组件名:组件对象}
+全局注册，所有组件内都能使用，在main.js中注册  Vue.component(组件名，组件对象)
+const app = createApp(App);
+
+// 全局注册组件
+app.component('ChildComponent', ChildComponent);
+
+异步组件
+用于懒加载
+
+~~~
+
+#### 组件通信
+
+~~~javascript
+组件通信
+父子关系 父组件通过props传递数据、子组件通过$emit更新、props校验（type、require、default、validator()）、单向数据流
+
+非父子关系 
+第一种provide & inject---简单类型 非响应式，复杂类型  响应式
+//数据源
+provide() {
+    return {
+      globalMessage: "Hello from Provide!" // 提供数据
+    };
+  }
+//数据接收
+inject: ["globalMessage"] // 注入祖先组件提供的数据
+第二种 eventbus(vue2)   mitt(vue3)
+非父子关系  event bus 1.创建一个空的eventbus vue实例；2.A监听event bus 实例的事件 Bus.$on(eventName,回调函数)；3.B组件触发 Bus.$emit(eventName,'')
+beforeDestroy() {
+    Bus.$off("custom-event"); // 避免内存泄漏
+  }
+
+跨层级（孙子）：爷爷provide，将data中的属性共享  孙子inject---简单类型 非响应式，复杂类型  响应式
+
+.sync修饰符  实现父子组件的数据双向绑定，可自定义属性名 :visible.sync="isShow"  等于  :visible="isShow" @update:visible="isShow = $event" / 子组件 this.emit('update:visible',false)
+
+兜底方案  vuex(vue2)    pina(vue3)
+~~~
+
+#### Vuex
+
+~~~javascript
 vuex:管理vue多组件共享的数据，多个组件共同维护一份数据，响应式变化，单向数据流，组件中不能直接修改
 store/index.js专门存放vuex
 Vue.use(Vuex)
@@ -1189,80 +1263,9 @@ $store.commit('模块名/xxx'，额外参数)
 mapMutations('模块名',['xxx'])
 $store.dispatch('模块名/xxx'，额外参数)
 mapActions('模块名',['xxx'])
-```
-
-
-
-#### 生命周期函数
-
-```javascript
-vue的生命周期（共8个钩子函数）
-beforeCreate 实例创建，data/methods都未初始化，不能访问data等属性
-created data/methods初始化完成，可访问，但未挂载到dom节点，适合初始化数据
-beforeMount 模板编译完成，虚拟dom创建完成
-mounted 挂载到dom节点，可以操作dom---应用场景，一进界面，获取焦点     常用
-beforeUpdate 数据修改，视图未更新，期间可以添加逻辑处理
-Updated 数据修改，视图已更新
-beforeDestroy data等属性可以访问，释放vue以外的资源（清除定时器、延时器）  常用
-destroyed 组件注销，this.el仍然可以访问，但不具备响应式
-
-模板当中可以省略this，在created函数当中需使用  this.$route.query.参数名
-
-
-vue的生命周期仅针对挂载的dom节点，vue实例优先创建于被挂载的dom，其余dom优先加载
-```
-
-### 组件
-
-~~~javascript
-components组件注册
-组件的概念，main.js是入口，导入vue、APP.vue根组件，渲染加载然后挂载到dom节点
-结构 App.vue中template只能有一个div根元素
-样式 scoped,作用于当前组件，原理，所有dom结构都加上了 ‘data-v-哈希值’，css选择默认添加
-逻辑  data必需是函数，保证每个组件实例创建的数据都是独立的
-
-
-普通组件：
-局部注册,只能在注册内的组件内使用 components:{组件名:组件对象}
-全局注册，所有组件内都能使用，在main.js中注册  Vue.component(组件名，组件对象)
-const app = createApp(App);
-
-// 全局注册组件
-app.component('ChildComponent', ChildComponent);
-
-异步组件
-用于懒加载
-
 ~~~
 
-#### 组件通信
 
-~~~javascript
-组件通信
-父子关系 父组件通过props传递数据、子组件通过$emit更新、props校验（type、require、default、validator()）、单向数据流
-
-非父子关系 
-第一种provide & inject---简单类型 非响应式，复杂类型  响应式
-//数据源
-provide() {
-    return {
-      globalMessage: "Hello from Provide!" // 提供数据
-    };
-  }
-//数据接收
-inject: ["globalMessage"] // 注入祖先组件提供的数据
-第二种 eventbus(vue2)   mitt(vue3)
-非父子关系  event bus 1.创建一个空的eventbus vue实例；2.A监听event bus 实例的事件 Bus.$on(eventName,回调函数)；3.B组件触发 Bus.$emit(eventName,'')
-beforeDestroy() {
-    Bus.$off("custom-event"); // 避免内存泄漏
-  }
-
-跨层级（孙子）：爷爷provide，将data中的属性共享  孙子inject---简单类型 非响应式，复杂类型  响应式
-
-.sync修饰符  实现父子组件的数据双向绑定，可自定义属性名 :visible.sync="isShow"  等于  :visible="isShow" @update:visible="isShow = $event" / 子组件 this.emit('update:visible',false)
-
-兜底方案  vuex(vue2)    pina(vue3)
-~~~
 
 #### 插槽
 
@@ -1303,7 +1306,7 @@ const route = new VueRouter({
   ],
    linkActiveClass: "my-active", // 修改 router-link-active 的名称
   linkExactActiveClass: "my-exact-active"， // 修改 router-link-exact-active 的名称
-  mode:"history"
+  mode:"history" //hash
 })
 
 <router-link to='/my'>
@@ -1355,9 +1358,111 @@ npm run serve
 运行项目
 ~~~
 
-## 
 
-## Vue工程化
+
+# Vue3学习
+
+相比Vue2编程式API、响应式数据(proxy)、
+
+## setup语法糖
+
+~~~javascript
+<script setup> //可以不用return返回变量和函数了，作用在beforeCreate()函数前，this指向undefine
+	
+</script>
+~~~
+
+
+
+## reactive/ref
+
+~~~javascript
+reactive 支持复杂对象
+ref 简单数据类型、复杂对象
+
+ref在script中，需要使用'.value'访问值
+~~~
+
+
+
+## watch/computed
+
+~~~javascript
+computed中也需要用get/set才能修改值
+watch([ref1,ref2],([1now,2now],[1old,2old]))
+~~~
+
+
+
+## defineOptions()
+
+~~~javascript
+避免setup占据了script的选项配置，除了props/emits/expose/slots除外
+<script setup>
+	defineOptions({
+  	name:'sun'
+  	//自定义更多属性
+})
+</script>
+~~~
+
+## 父子通信
+
+~~~javascript
+defineProps
+~~~
+
+
+
+## 模板引用
+
+~~~javascript
+通过ref获取dom对象或者组件，在setup语法糖下，组件内部的数据和方法是不对外开放的，可以通过defineExpose()指定哪些属性和方法允许访问
+~~~
+
+## provie/inject
+
+~~~java
+可以跨层级传递数据和方法，实现通信
+  父组件 provide  提供了数据，父组件也要提供修改的方法，谁的数据谁维护原则  
+  子组件inject
+  
+  传普通数据 provide('参数名'，'参数值')
+  传响应数据 provide('参数名'，ref对象)
+  传函数
+~~~
+
+
+
+## defineModel()
+
+~~~javascript
+defineProps   defineEmits()
+~~~
+
+
+
+
+
+## pinia状态管理工具
+
+~~~javascript
+支持组合式API
+由vuex的5个（state   actions  getters  mutions module）变成了3个 state   actions  getters
+
+定义store
+
+actions 异步实现  async
+
+直接解构会丢失响应性，使用关键字 sotreToRefs()，方法直接解构就可以
+
+pinia持久化插件
+psersist  key  局部持久化
+~~~
+
+
+
+# Vue工程化
 
 ~~~javascript
 vue的工程化，源代码->自动化编译压缩组合->运行的代码
@@ -1422,5 +1527,14 @@ route.replace和push的区别，push会叠加历史记录
 mixins混入概念，对组件公用方法的抽象，可以应用到任何组件中
 
 路由懒加载，被访问才加载组件
+
+
+npm ->  yarn -> pnpm  更快更省空间
+eslint 看规范
+prettier 美化
+
+使用脚手架创建项目后，需要安装依赖再启动项目
+
+husky
 ~~~
 
