@@ -215,8 +215,8 @@ cmd+opt+t   表格
         </tbody>
         <tfoot></tfoot>
     </table>
-  <!--表单-->
-  <input type:"file/checkbox/radio/text/password" checked placeholder="" mutiple>
+  <!--表单 checked（针对radio、checkbox）,multiple(针对file)-->
+  <input type:"file/checkbox/radio/text/password" checked placeholder="" multiple>
   <textarea></textarea>
   <label for="man">男</label>
   <selection>
@@ -225,20 +225,79 @@ cmd+opt+t   表格
     <option selected>三明</option>
   </selection>
   
-  <button type="submit/reset/button">按钮</button>
+  <!-- form 表单区域 -->
+<!-- action="" 发送数据的地址 -->
+<form action="">
+  用户名：<input type="text">
+  <br><br>
+  密码：<input type="password">
+  <br><br>
+
+  <!-- 如果省略 type 属性，功能是 提交 -->
+  <button type="submit">提交</button>
+  <button type="reset">重置</button>
+  <button type="button">普通按钮</button>
+</form>
 </body>
 </html>
 ~~~
 
 ## css知识点
 
+### 常见属性
+
+~~~javascript
+height
+width
+background-color
+color
+font-family
+font-size
+font-style  normal/italic
+line-height
+text-indent  2em  缩进
+text-align
+text-decoration  underline/linethrough
+background-image: url(./images/1.png);
+background-repeat: no-repeat;
+background-position: 50px center;  水平   垂直
+background-size:cover/contain
+background-attachment: fixed;
+~~~
+
+**font: 是否倾斜  是否加粗  字号/行高 字体（必须按顺序书写）**
+
+**属性值：背景色 背景图 背景图平铺方式 背景图位置/背景图缩放  背景图固定（**空格隔开各个属性值，不区分顺序**）**
+
+标签选择器、类选择器、ID选择器、通配符选择器
+
+复合选择器
+
+- 后代
+- 子代
+- 交集
+- 并集
+- 伪类    a:
+- 超链接伪类    a:hover /visited
+- 伪元素 a::after/before
+
 **继承性**：文字属性和文本属性，父元素设置后子元素会继承，`<a>`标签不会继承父元素字体颜色
 
-`text-align`   `font-size`   `color`  `line-height`
+**层叠性**：后覆盖前相同属性、不同属性叠加
+
+**优先级**
 
 **css样式冲突**，根据权重进行判断，复杂选择器则根据权重相加比较总和，权重相同，后者生效
 
-`行内样式（1000）>id选择器（100）>类选择器（10）>标签选择器（1）>通配符选择器（0）`
+`!important>行内样式（1000）>id选择器（100）>类选择器（10）>标签选择器（1）>通配符选择器（0）`
+
+```javascript
+p {
+  color: red !important;
+}
+```
+
+
 
 **标签的表现形式**
 
@@ -255,6 +314,8 @@ cmd+opt+t   表格
    - 同行展示
    - 可设置宽高
    - 宽度由内容撑开
+
+转换显示模式：display:block/inline-block/inline
 
 ```html
 <style>
