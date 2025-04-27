@@ -269,6 +269,39 @@ background-attachment: fixed;
 
 **属性值：背景色 背景图 背景图平铺方式 背景图位置/背景图缩放  背景图固定（**空格隔开各个属性值，不区分顺序**）**
 
+### 布局规则
+
+~~~css
+四种布局规则 BFC/IFC/FFC/GFC
+浮动塌陷
+子元素浮动脱离文档流，父元素高度无法感知子元素高度，父元素高度为0
+三个解决办法
+---增加clearfix
+.parent::after{
+  content:"";
+  display:block;
+  clear:both;
+}
+---变为BFC
+.parent{
+  overflow:hidden;
+  /*或者  overflow:auto;*/
+  /*或者  display:flow-root*/
+}
+
+margin布局陷阱
+垂直上会合并取最大值，水平上不会
+子元素margin-top会穿透父元素
+margin:auto，作用在块元素且有宽度，inline无效
+flex布局中，margin:auto,会自动变成可以拉伸的弹簧，自动把元素推到两边或中间
+
+如果父元素没有设置 position（relative/absolute/fixed/sticky），子元素的 z-index 是不会生效的。
+~~~
+
+
+
+
+
 标签选择器、类选择器、ID选择器、通配符选择器
 
 复合选择器
@@ -584,6 +617,8 @@ content内容
 
 `visibility:hidden/visible`消失，但占据位置，可触发事件
 
+`position: absolute; top: -9999px;`将元素移出视口，仍占空间
+
 ### 浮动
 
 1. 浮动：脱离文档流，实现页面布局，专门用于块元素同行展示的问题，空间不够换行，左浮动不会改变布局顺序，右浮动会
@@ -649,7 +684,50 @@ align-self：作用单个元素，同align-items的值
 
 ```
 
+### Grid布局
 
+~~~css
+diplay:grid;
+grid-template-columns: 1fr 1fr 1fr;
+grid-template-rows
+gap
+grid-column
+grid-row
+grid-template-areas  /*类似画个草图*/
+grid-area  /*草图的子元素*/
+justify-items  /*控制子元素在容器内水平方向的对齐方式*/
+align-items
+justify-content   /*控制容器在浏览器内水平方向的对齐方式*/
+align-content	    
+
+~~~
+
+### 移动端布局
+
+~~~css
+第一种
+@media 媒体查询
+
+Flexbox 和 Grid 布局
+
+相对单位如 vw, vh, em, rem, %
+  
+第二种  视口适配
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+第三种 响应式图片
+<picture>
+  <source media="(max-width: 600px)" srcset="image-small.jpg">
+  <source media="(min-width: 601px)" srcset="image-large.jpg">
+  <img src="image-default.jpg" alt="Responsive Image">
+</picture>
+  
+第四种flex布局
+  
+第五种百分比布局、单位适配
+  
+~~~
 
 
 
@@ -706,6 +784,8 @@ align-self：作用单个元素，同align-items的值
    1. 引入外部字体图标文件
    2. 使用`<i>/<span>`等标签通过类名引入字体图标文件，引用图标
    3. 通过类名选择器选择，通过`font-size、color`等属性设置图标大小
+
+### 
 
 ## CSS3部分
 
