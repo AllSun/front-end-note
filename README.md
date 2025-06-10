@@ -872,11 +872,78 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 
 # JavaScript
 
+## JS体系
+
+![image-20250610221443580](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221443580.png)
+
+![image-20250610221504300](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221504300.png)
+
+### location对象
+
+```javascript
+    // location 对象  
+    // 1. href属性 （重点） 得到完整地址，赋值则是跳转到新地址
+    console.log(location.href)
+    // location.href = 'http://www.itcast.cn'
+
+    // 2. search属性  得到 ? 后面的地址 
+    console.log(location.search)  // ?search=笔记本
+
+    // 3. hash属性  得到 # 后面的地址
+    console.log(location.hash)
+
+    // 4. reload 方法  刷新页面
+    const btn = document.querySelector('.reload')
+    btn.addEventListener('click', function () {
+      // location.reload() // 页面刷新
+      location.reload(true) // 强制页面刷新 ctrl+f5
+    })
+
+
+```
+
+### navigator对象
+
+```javascript
+// 检测 userAgent（浏览器信息）
+(function () {
+  const userAgent = navigator.userAgent
+  // 验证是否为Android或iPhone
+  const android = userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
+  const iphone = userAgent.match(/(iPhone\sOS)\s([\d_]+)/)
+  // 如果是Android或iPhone，则跳转至移动站点
+  if (android || iphone) {
+    location.href = 'http://m.itcast.cn'
+  }})();
+```
+
+### history对象
+
+![image-20250610222752200](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610222752200.png)
+
+### localStorage对象
+
+![image-20250610224854227](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610224854227.png)
+
 ## 一些重点
 
 隐式转换
 
-arr = []  这个是数组  push   unshift  pop shift  splice  操作原数组
+arr = []  这个是数组  push   unshift  pop shift  splice  操作原数组 ，map、join、reduce、filter
+
+```javascript
+const newArray = oldArray.map(function(element, index, array) {
+  // 返回新的元素
+});
+
+const numbers = [1, 2, 3, 4];
+const sum = numbers.reduce((acc, cur) => acc + cur, 0);
+
+const newArray = arr.filter(function(element, index, array) {
+  // 返回 true 或 false，决定是否保留该元素
+});
+
+```
 
 obj = {}  这个是对象
 
@@ -945,7 +1012,9 @@ classList.add('classname')   追加类名 remove('classname')  删除  toggle('c
 </script>
 ~~~
 
-setInterval(fn,time)
+**间歇函数** setInterval(fn,time)  间隔执行
+
+**延迟函数**setTimeout(fn,time) 隔多久执行，执行一次， clearTimeout(timerId)  返回延迟函数的id
 
 offsetWidth  获取可视宽高、包含元素自身设置的宽高、padding、border
 
@@ -991,7 +1060,9 @@ buttons[i].addEventListener('click', function () {
 
 ```
 
+正则表达式
 
+![image-20250610221257703](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221257703.png)
 
 ## 事件
 
