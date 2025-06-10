@@ -98,7 +98,7 @@ cmd+opt+t   表格
 
 `git branch -d 分支名`合并完就删除
 
-![image-20250303103634267](/Users/AllSun/Library/Application Support/typora-user-images/image-20250303103634267.png)
+![image-20250303103634267](README.assets/image-20250303103634267.png)
 
 **master原先是C5，合并了新的提交后移动到C10,但是原C5的节点有新的分支，再合并的时候会自动产生C11节点**
 
@@ -872,6 +872,162 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 
 # JavaScript
 
+## 一些重点
+
+隐式转换
+
+arr = []  这个是数组  push   unshift  pop shift  splice  操作原数组
+
+obj = {}  这个是对象
+
+set =()
+
+> 如果函数内部，变量没有声明，直接赋值，也当全局变量看，但是强烈不推荐
+>
+> 但是有一种情况，函数内部的形参可以看做是局部变量。
+
+#### 断点调试
+
+**作用：**学习时可以帮助更好的理解代码运行，工作时可以更快找到bug
+
+浏览器打开调试界面
+
+1. 按F12打开开发者工具
+2. 点到源代码一栏 （ sources ）
+3. 选择代码文件
+
+**断点：**在某句代码上加的标记就叫断点，当程序执行到这句有标记的代码时会暂停下来
+
+## 常用WebAPIs
+
+querySelector
+
+querySelectorAll
+
+getElementById
+
+getElementByTagName
+
+修改内容
+
+innerText
+
+innerHtml
+
+修改样式
+
+style.color
+
+style.width
+
+style.backgroundColor
+
+修改类名
+
+className   覆盖旧类名
+
+classList.add('classname')   追加类名 remove('classname')  删除  toggle('classname')切换 contains('classname') 是否包含
+
+~~~javascript
+自定义属性：
+
+在html5中推出来了专门的data-自定义属性  
+
+在标签上一律以data-开头
+
+在DOM对象上一律以dataset对象方式获取 
+<script>
+        // 1. 获取元素
+        let div = document.querySelector('div')
+        // 2. 获取自定义属性值
+         console.log(div.dataset.id)
+      
+</script>
+~~~
+
+setInterval(fn,time)
+
+offsetWidth  获取可视宽高、包含元素自身设置的宽高、padding、border
+
+offsetHeight
+
+```javascript
+//DOM节点的创建、复制、插入、删除、替换
+
+const p = document.createElement('p')
+const p2 = document.querySelector('p').cloneNode(true) //true，该节点下的子节点也全部复制
+document.querySelector('.box').appendChild(p2) //在该元素末尾插入
+
+// 第 2 个 li 元素
+const relative = document.querySelector('li:nth-child(2)')
+document.querySelector('ul').insertBefore(li1, relative) //在父节点中任意子节点之前插入新节点
+
+// 获取 ul 父节点
+let ul = document.querySelector('ul')
+// 待删除的子节点
+let lis = document.querySelectorAll('li')
+// 删除节点
+ul.removeChild(lis[0])  //使用removeChild一定要有父子关系
+
+const node = document.getElementById('toBeRemoved');
+node.remove();
+
+// 父节点
+const ul = document.querySelector('ul')
+// 所有的子节点
+console.log(ul.childNodes)  //childNodes获取全部的子节点，回车换行会被认为是空白文本节点
+// 只包含元素子节点
+console.log(ul.children) //children只获取元素类型节点
+
+buttons[i].addEventListener('click', function () {
+  // console.log(this.parentNode); // 父节点 td
+  // console.log(this.parentNode.parentNode); // 爷爷节点 tr
+  this.parentNode.parentNode.style.color = 'red'  //parentNode以相对位置查找父节点，
+  // 前一个节点
+  console.log(this.previousSibling) //previousSibling以相对位置查找前一个节点
+  // 下一下节点
+  console.log(this.nextSibling)//nextSibling以相对位置查找后一个节点
+})  
+
+```
+
+
+
+## 事件
+
+addEventListener('eventname',function(e){})  e为事件对象 ,事件对象常用属性`type、clientX/Y、offsetX/Y`
+
+>常用eventname: click /  dbclick / mouseenter /mouseleave  / keydown /keyup /foucs /blur/input
+>
+>其他常用事件： load(监听所有事件加载完毕) /scroll（滚动条滚动）/resize(窗口大小改变事件)/change（input值被修改，失去焦点后触发）
+
+冒泡：子到父  `addEventListener('eventname',function(e){}，false) `参数为默认为`false`,为冒泡
+
+捕获：父到子  `addEventListener('eventname',function(e){}，true) `参数为`true`为捕获
+
+事件流只会在父子元素具有相同事件类型时才会产生影响
+
+e.stopPropagation
+
+事件委托：给父元素绑定监听事件，使用事件对象的 `e.target === BUTTON`来判断属于哪个类型，再触发回调函数，这样就不用给每个子组件单独添加事件监听了
+
+## 日期对象
+
+```javascript
+const date = new Date('2025-01-01')
+date.getFullYear()
+date.getFullMonth()  //0-11
+getHours 获取小时，取值为 0 ~ 23
+getMinutes 获取分钟，取值为 0 ~ 59
+getSeconds 获取秒，取值为 0 ~ 59
+//获取时间戳
+date.getTime()
++new Date()
+Date.now()
+```
+
+
+
 ## 作用域
 
 一定范围内可以访问到的变量
@@ -1163,9 +1319,9 @@ directives:{
 父组件  @input="selectId = $event"  子组件 props属性名应为value $emit事件名应为 input ,父组件才能直接使用v-model
 ~~~
 
-![image-20250306172726091](/Users/AllSun/Library/Application Support/typora-user-images/image-20250306172726091.png)
+![image-20250306172726091](README.assets/image-20250306172726091.png)
 
-![image-20250306172628823](/Users/AllSun/Library/Application Support/typora-user-images/image-20250306172628823.png)
+![image-20250306172628823](README.assets/image-20250306172628823.png)
 
 ### Vue实例属性
 
