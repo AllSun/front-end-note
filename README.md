@@ -921,7 +921,7 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 
 ![image-20250610222752200](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610222752200.png)
 
-### localStorage对象
+### localStorage对象、sessionStorage对象
 
 ![image-20250610224854227](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610224854227.png)
 
@@ -943,6 +943,11 @@ const newArray = arr.filter(function(element, index, array) {
   // 返回 true 或 false，决定是否保留该元素
 });
 
+forEach(function(element,index){
+  
+})
+join reverse concat  every  sort  
+toFixed()   //保留多少位小数
 ```
 
 obj = {}  这个是对象
@@ -964,6 +969,10 @@ set =()
 3. 选择代码文件
 
 **断点：**在某句代码上加的标记就叫断点，当程序执行到这句有标记的代码时会暂停下来
+
+**块作用域**、 **局部作用域**
+
+**var变量提升、函数提升（不支持表达式提升） 函数的arguments形参对象**
 
 ## 常用WebAPIs
 
@@ -1156,6 +1165,8 @@ re();
 let fn = (username) => ({username:username}) //返回一个对象时，要注意括弧
 ```
 
+无法使用arguments对象，只能使用剩余参数
+
 自己不会创建`this`,只会沿用上一层
 
 箭头函数中的 `this` 始终指向它被定义时的外部作用域中的 `this`
@@ -1212,7 +1223,11 @@ fn()
 
 - 即使使用 `call`、`apply` 或 `bind`，也无法改变箭头函数中的 `this` 绑定。
 
+  call(this,obj,obj)   apply(this,[obj,obj])   bind返回一个新的绑定this的函数
+
 构造函数和原型对象中的`this`都指向实例化的对象
+
+**dom事件的回调函数、prototype的属性方法都不建议使用箭头函数**
 
 ```javascript
 const btn = document.querySelector('.btn');
@@ -1242,6 +1257,14 @@ obj.method(); // 42
 
 ## 创建对象
 
+**使用new 的函数，就是构造函数**
+
+### String对象
+
+```javascript
+split length substring  includes  toUpperCase   indexOf  replace  match
+```
+
 三种方法
 
 ```javascript
@@ -1266,7 +1289,7 @@ obj.method(); // 42
   const peiqi = new Pig('佩奇',3); //只能由 new 关键字来 实例化
 ```
 
-##   原型
+##   原型对象prototype
 
 构造函数的方法是每个实例对象**独有**的
 
@@ -1276,22 +1299,63 @@ obj.method(); // 42
 
 构造函数和原型对象中的`this`都指向实例化的对象
 
-### constructor属性、`__proto__`(对象原型)
+### constructor属性
 
 `prototype`中有`constructor`属性指向构造函数
 
 ```javascript
 //constructor属性应用场景举例
-function Star(name){
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.sayHi = function () {   //只是修改了prototype的一个属性
+  console.log("Hi, I'm " + this.name);
+};
+
+const p = new Person("小明");
+console.log(p.constructor === Person); // ✅ true
+
+function Person(name) {
   this.name = name;
 }
 
-Star.prototype = {
-  //重新指回构造函数
-  constructor : Star,
-  sing : function(){//dosomething}
-}
+// ⚠️ 注意：这里我们整个替换了原型对象！
+Person.prototype = {                  //整个prototype被覆盖
+  sayHi: function () {
+    console.log("Hi, I'm " + this.name);
+  }
+};
+
+const p = new Person("小明");
+console.log(p.constructor === Person); // ❌ false！变成了 Object
+
+
+Person.prototype = {
+  constructor: Person, // ✅ 手动补回来   constructor的作用
+  sayHi: function () {
+    console.log("Hi, I'm " + this.name);
+  }
+};
 ```
+
+## `__proto__`(对象原型)
+
+```javascript
+function Person() {}
+const p = new Person();
+
+p.__proto__ === Person.prototype;       // ✅ true
+Person.prototype.constructor === Person; // ✅ true
+
+```
+
+>p (实例对象)
+>│
+>└── __proto__ → Person.prototype
+>              │
+>              └── constructor → Person
+>
+>原型链就是：对象 → `__proto__` → 原型对象 → 再往上找...
 
 `__proto__用于实例对象指向的原型对象（prototype），__proto__中也有constructor属性，指向创建实例对象的构造函数`
 
@@ -1311,6 +1375,154 @@ Man.prototype.Swimming = function (){}
 
 const allsun = new Man('allsun',30)
 ```
+
+### 原型链
+
+基于原型对象的继承使得不同构造函数的原型对象关联在一起，并且这种关联的关系是一种链状的结构，我们将原型对象的链状结构关系称为原型链
+
+**__proto__**对象原型的意义就在于为对象成员查找机制提供一个方向，或者说一条路线
+
+![67679338869](README.assets/1676793388695.png)
+
+## 深浅拷贝
+
+> 浅拷贝只复制一层属性。**如果属性是引用类型（对象、数组），拷贝的是“引用”**，不是实际内容。
+
+```javascript
+const obj1 = {
+  name: '小明',
+  info: { age: 18 }
+};
+
+const obj2 = Object.assign({}, obj1); // 或 const obj2 = { ...obj1 }
+
+obj2.name = '小红';          // ✅ 修改不影响 obj1
+obj2.info.age = 20;          // ⚠️ 修改 info 影响 obj1！
+
+console.log(obj1.info.age);  // 20 （引用类型共用）
+
+```
+
+> 深拷贝会**递归地复制所有层级**的数据结构，**完全独立**。
+
+1. 通过递归实现深拷贝
+
+   ```javascript
+   const obj = {
+         uname: 'pink',
+         age: 18,
+         hobby: ['乒乓球', '足球'],
+         family: {
+           baby: '小pink'
+         }
+       }
+       const o = {}
+       // 拷贝函数
+       function deepCopy(newObj, oldObj) {
+         debugger
+         for (let k in oldObj) {
+           // 处理数组的问题  一定先写数组 在写 对象 不能颠倒
+           if (oldObj[k] instanceof Array) {
+             newObj[k] = []
+             //  newObj[k] 接收 []  hobby
+             //  oldObj[k]   ['乒乓球', '足球']
+             deepCopy(newObj[k], oldObj[k])
+           } else if (oldObj[k] instanceof Object) {
+             newObj[k] = {}
+             deepCopy(newObj[k], oldObj[k])
+           }
+           else {
+             //  k  属性名 uname age    oldObj[k]  属性值  18
+             // newObj[k]  === o.uname  给新对象添加属性
+             newObj[k] = oldObj[k]
+           }
+         }
+       }
+       deepCopy(o, obj) // 函数调用  两个参数 o 新对象  obj 旧对象
+       console.log(o)
+       o.age = 20
+       o.hobby[0] = '篮球'
+       o.family.baby = '老pink'
+       console.log(obj)
+       console.log([1, 23] instanceof Object
+   ```
+
+2. lodash/cloneDeep
+
+   ```javascript
+   <script src="./lodash.min.js"></script>
+     <script>
+       const obj = {
+         uname: 'pink',
+         age: 18,
+         hobby: ['乒乓球', '足球'],
+         family: {
+           baby: '小pink'
+         }
+       }
+       const o = _.cloneDeep(obj)
+       console.log(o)
+       o.family.baby = '老pink'
+       console.log(obj)
+     </script>
+   ```
+
+3. 通过JSON.stringify()实现，缺点无法复制函数、Map等复杂结构
+
+   ```javascript
+   const obj = {
+         uname: 'pink',
+         age: 18,
+         hobby: ['乒乓球', '足球'],
+         family: {
+           baby: '小pink'
+         }
+       }
+       // 把对象转换为 JSON 字符串
+       // console.log(JSON.stringify(obj))
+       const o = JSON.parse(JSON.stringify(obj))
+       console.log(o)
+       o.family.baby = '123'
+       console.log(obj)
+   ```
+
+   ## 防抖节流
+
+   debounce
+
+   ```javascript
+   function debounce(fn, delay) {
+     let timer = null;
+     return function (...args) {
+       clearTimeout(timer);
+       timer = setTimeout(() => {
+         fn.apply(this, args);
+       }, delay);
+     };
+   }
+   ```
+
+   throttle
+
+   ```javascript
+   function throttle(fn, delay) {
+     let lastTime = 0;
+     return function (...args) {
+       const now = Date.now();
+       if (now - lastTime > delay) {
+         lastTime = now;
+         fn.apply(this, args);
+       }
+     };
+   }
+   window.addEventListener('scroll', throttle(() => {
+     console.log('滚动中...', Date.now());
+   }, 200));
+   ```
+
+   
+
+   ![img](README.assets/u=1597464337,4211360165&fm=253&fmt=auto&app=138&f=JPEG.jpeg)
 
 # Vue2学习
 
