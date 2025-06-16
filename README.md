@@ -118,6 +118,15 @@ cmd+opt+t   表格
 
 
 
+# 浏览器渲染
+
+```javascript
+输入 URL → DNS解析 → TCP连接 → 发送HTTP请求 → 响应返回HTML
+→ 浏览器解析HTML → 构建DOM树 → 解析CSS → 构建CSSOM树
+→ DOM + CSSOM → 构建渲染树 → 布局（Layout）→ 绘制（Paint）→ 合成（Composite）→ 页面呈现
+
+```
+
 # HTML+CSS
 
 ## 常用html标签
@@ -1486,7 +1495,7 @@ console.log(obj1.info.age);  // 20 （引用类型共用）
        console.log(obj)
    ```
 
-   ## 防抖节流
+   # 防抖节流
 
    debounce
 
@@ -1524,7 +1533,33 @@ console.log(obj1.info.age);  // 20 （引用类型共用）
 
    ![img](README.assets/u=1597464337,4211360165&fm=253&fmt=auto&app=138&f=JPEG.jpeg)
 
-# Vue2学习
+# AJAX和Axios
+
+> 使用XMLHttpRequest对象与服务器进行通信
+
+**axios语法**
+
+```javascript
+//常用http请求方法，get/post/delete/patch/put
+axios({
+  url: '目标资源地址',
+  params: {
+    参数名: 值
+  },
+  method:'', //默认get
+  data:{
+    参数名：值  //如username
+  }
+}).then((result) => {
+  // 对服务器返回的数据做后续处理
+}).catch((error) => {
+  //处理失败         
+})
+```
+
+
+
+# Vue2学习·
 
 ## 本次常见JS方法整理
 
