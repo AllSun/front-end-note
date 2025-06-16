@@ -1084,7 +1084,7 @@ buttons[i].addEventListener('click', function () {
 
 ## 事件
 
-addEventListener('eventname',function(e){})  e为事件对象 ,事件对象常用属性`type、clientX/Y、offsetX/Y`
+addEventListener('eventname',function(e){})  e为事件对象 ,事件对象常用属性`type、clientX/Y、offsetX/Y、target`
 
 >常用eventname: click /  dbclick / mouseenter /mouseleave  / keydown /keyup /foucs /blur/input
 >
@@ -1537,7 +1537,104 @@ console.log(obj1.info.age);  // 20 （引用类型共用）
 
 > 使用XMLHttpRequest对象与服务器进行通信
 
-**axios语法**
+## **使用原生XHR发起ajax请求**
+
+```javascript
+const xhr = new XMLHttpRequest()
+//使用XHR携带查询参数，可以使用模板字符串，进行动态传参
+xhr.open('请求方法', '请求url网址？参数=孙哈哈')
+xhr.addEventListener('loadend', () => {
+  // 响应结果
+  const data = JSON.parse(xhr.response)
+  console.log(xhr.response)
+})
+xhr.send()
+//URLSearchParams对象，格式化查询参数
+// 1. 创建 URLSearchParams 对象
+const paramsObj = new URLSearchParams({
+  参数名1: 值1,
+  参数名2: 值2
+})
+
+// 2. 生成指定格式查询参数字符串，仅仅做格式转换，然后需要拼接在url上
+const queryString = paramsObj.toString()
+// 结果：参数名1=值1&参数名2=值2
+
+// 1. 告诉服务器，我传递的内容类型，是 JSON 字符串
+xhr.setRequestHeader('Content-Type', 'application/json')
+// 2. 准备数据并转成 JSON 字符串
+const user = { username: 'itheima007', password: '7654321' }
+const userStr = JSON.stringify(user)
+// 3. 发送请求体数据
+xhr.send(userStr)
+```
+
+## **Promise对象**
+
+> 解决回调函数地狱问题：为了处理一系列异步操作，一个回调函数嵌套另一个回调函数，导致代码层层嵌套、可读性差、难以维护的现象,或者使用async/await解决
+
+地狱demo:
+
+```javascript
+getUser(userId, function(user) {
+  getOrders(user.id, function(orders) {
+    getOrderDetails(orders[0].id, function(details) {
+      sendEmail(user.email, details, function(result) {
+        console.log('Done!');
+      });
+    });
+  });
+});
+
+```
+
+> Promise使用链式调用解决
+
+```javascript
+//1. new Promise 对象执行异步任务。2. 用 resolve 关联 then 的回调函数传递成功结果。3.用 reject 关联 catch 的回调函数传递失败结果。
+//使用axios或者fetch函数直接可以使用then链式调用，本身返回的就是一个Promise对象
+/**
+ * 目标：使用Promise管理XHR请求省份列表
+ *  1. 创建Promise对象
+ *  2. 执行XHR异步代码，获取省份列表
+ *  3. 关联成功或失败函数，做后续处理
+*/
+// 1. 创建Promise对象
+const p = new Promise((resolve, reject) => {
+  // 2. 执行XHR异步代码，获取省份列表
+  const xhr = new XMLHttpRequest()
+  xhr.open('GET', 'http://hmajax.itheima.net/api/province')
+  xhr.addEventListener('loadend', () => {
+    // xhr如何判断响应成功还是失败的？
+    // 2xx开头的都是成功响应状态码
+    if (xhr.status >= 200 && xhr.status < 300) {
+      //关联成功函数
+      resolve(JSON.parse(xhr.response))
+    } else {
+      //关联失败函数
+      reject(new Error(xhr.response))
+    }
+  })
+  xhr.send()
+})
+
+// 3. 关联成功或失败函数，做后续处理
+p.then(result => {
+  console.log(result)
+  document.querySelector('.my-p').innerHTML = result.list.join('<br>')
+}).catch(error => {
+  // 错误对象要用console.dir详细打印
+  console.dir(error)
+  // 服务器返回错误提示消息，插入到p标签显示
+  document.querySelector('.my-p').innerHTML = error.message
+})
+```
+
+### Promise对象的三个状态：pending/fulfilled/reject
+
+![image-20250616231753832](/Users/allsun/Desktop/front-end-note/README.assets/image-20250616231753832.png)
+
+## **axios语法，封装了XHR对象**
 
 ```javascript
 //常用http请求方法，get/post/delete/patch/put
@@ -1556,6 +1653,10 @@ axios({
   //处理失败         
 })
 ```
+
+## 图片上传
+
+> 先用文件选择元素，获取到文件对象，然后装入 FormData 表单对象中，再发给服务器，得到图片在服务器的 URL 网址，再通过 img 标签加载图片显示
 
 
 
