@@ -1100,6 +1100,16 @@ e.stopPropagation
 
 事件委托：给父元素绑定监听事件，使用事件对象的 `e.target === BUTTON`来判断属于哪个类型，再触发回调函数，这样就不用给每个子组件单独添加事件监听了
 
+### 事件循环
+
+> 先执行同步，再执行异步，同步函数按照顺序，异步按照入栈顺序，但是setTimeout函数例外，是按照最短延迟时间
+
+### 异步任务：宏任务、微任务
+
+> 宏任务  setTimeout、setInterval、ajax
+>
+> 微任务 Promise.then
+
 ## 日期对象
 
 ```javascript
@@ -1571,7 +1581,7 @@ xhr.send(userStr)
 
 ## **Promise对象**
 
-> 解决回调函数地狱问题：为了处理一系列异步操作，一个回调函数嵌套另一个回调函数，导致代码层层嵌套、可读性差、难以维护的现象,或者使用async/await解决
+> 解决回调函数地狱问题：为了处理一系列异步操作，一个回调函数嵌套另一个回调函数，导致代码层层嵌套、可读性差、难以维护的现象,或者使用async/await解决，await原地等待函数返回结果
 
 地狱demo:
 
@@ -1633,6 +1643,21 @@ p.then(result => {
 ### Promise对象的三个状态：pending/fulfilled/reject
 
 ![image-20250616231753832](/Users/allsun/Desktop/front-end-note/README.assets/image-20250616231753832.png)
+
+## Promise.all
+
+> 打包所有Promise对象，有一个失败就抛出异常
+
+```javascript
+const p = Promise.all([Promise对象, Promise对象, ...])
+p.then(result => {
+  // result 结果: [Promise对象成功结果, Promise对象成功结果, ...]
+}).catch(error => {
+  // 第一个失败的 Promise 对象，抛出的异常对象
+})
+```
+
+
 
 ## **axios语法，封装了XHR对象**
 
