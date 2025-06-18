@@ -883,6 +883,8 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 
 ## JS体系
 
+**模块内的属性和函数都是私有的，如果对外使用，需要使用标准语法导出和导入才可以，而这个标准叫 CommonJS 标准**
+
 ![image-20250610221443580](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221443580.png)
 
 ![image-20250610221504300](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221504300.png)
@@ -1682,6 +1684,78 @@ axios({
 ## 图片上传
 
 > 先用文件选择元素，获取到文件对象，然后装入 FormData 表单对象中，再发给服务器，得到图片在服务器的 URL 网址，再通过 img 标签加载图片显示
+
+
+
+# NodeJS
+
+模块化，一个文件夹就一个模块，一个模块中需要有package.json文件，package.json文件记录说明信息，及导入时，默认的导入文件，一般为index.js
+
+commonJS    export.module={}     require
+
+# webpack
+
+> 安装至全局软件包，静态模块打包工具，是分开打包的，需要针对js代码、html、css分别做打包设置，打包方式通过入口构建依赖图
+
+## 打包JS代码
+
+```javascript
+//1、项目根目录，新建 Webpack.config.js 配置文件
+const path = require('path')
+
+module.exports = {
+  entry: path.resolve(__dirname, 'src/login/index.js'),
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: './login/index.js'  
+  }
+}
+```
+
+## 打包html
+
+```javascript
+//安装html-webpack-plugin插件，建议只在生产环境中压缩
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  // ...其他 webpack 配置
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html', // 模板路径
+      minify: {
+        removeComments: true,             // 删除注释
+        collapseWhitespace: true,         // 删除空格
+        removeRedundantAttributes: true,  // 删除多余属性
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        minifyJS: true,                   // 压缩页面中的 JS
+        minifyCSS: true,                  // 压缩页面中的 CSS
+        minifyURLs: true
+      }
+    })
+  ]，
+  module: { // 加载器
+    rules: [ // 规则列表
+      {
+        test: /\.css$/i, // 匹配 .css 结尾的文件
+        use: ['style-loader', 'css-loader'], // 使用从后到前的加载器来解析 css 代码和插入到 DOM
+      }
+    ]
+  }
+}
+
+```
+
+## 打包CSS
+
+>Webpack 默认只识别 JS 和 JSON 文件内容，所以想要让 Webpack 识别更多不同内容，需要使用加载器
+
+介绍需要的 2 个加载器来辅助 Webpack 才能打包 css 代码
+
+* [加载器 css-loader](https://webpack.docschina.org/loaders/css-loader/)：解析 css 代码
+* [加载器 style-loader](https://webpack.docschina.org/loaders/style-loader/)：把解析后的 css 代码插入到 DOM（style 标签之间）
 
 
 
