@@ -1748,6 +1748,61 @@ module.exports = {
 
 ```
 
+## 压缩CSS
+
+> **将构建生成的 CSS 文件进行压缩（去除空格、注释、简化代码），减小体积，提高页面加载速度。**
+
+css-minimizer-webpack-plugin
+
+```javascript
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+
+module.exports = {
+  // ...
+  // 优化
+  optimization: {
+    // 最小化
+    minimizer: [
+      // 在 webpack@5 中，你可以使用 `...` 语法来扩展现有的 minimizer（即 
+      // `terser-webpack-plugin`），将下一行取消注释（保证 JS 代码还能被压缩处理）
+      `...`,
+      new CssMinimizerPlugin(),
+    ],
+  }
+};
+```
+
+⚙️ Webpack 项目结构（资源由 JS 控制）,所以才需要单独提取CSS文件，才要用这个插件
+
+```sql
+project/
+├── src/
+│   ├── index.js         <-- 入口 JS，import CSS
+│   ├── styles/
+│   │   └── main.css     <-- 被 JS 引入
+│   └── index.html       <-- html-webpack-plugin 模板
+├── dist/
+│   ├── index.html       <-- 构建后自动插入 <link> 和 <script>
+│   ├── main.js
+│   └── styles.css
+├── webpack.config.js
+
+```
+
+🧱 传统项目结构（手动写 HTML 引入）
+
+```sql
+project/
+├── index.html      <-- 手写 <link> 和 <script>
+├── css/
+│   └── main.css
+├── js/
+│   └── app.js
+
+```
+
+
+
 ## 打包CSS
 
 >Webpack 默认只识别 JS 和 JSON 文件内容，所以想要让 Webpack 识别更多不同内容，需要使用加载器
@@ -1756,6 +1811,106 @@ module.exports = {
 
 * [加载器 css-loader](https://webpack.docschina.org/loaders/css-loader/)：解析 css 代码
 * [加载器 style-loader](https://webpack.docschina.org/loaders/style-loader/)：把解析后的 css 代码插入到 DOM（style 标签之间）
+
+## 打包less
+
+下载 less 和 less-loader 本地软件包
+
+```javascript
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      // ...
+      {
+        test: /\.less$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"]  //less-loader将less转换为css
+      }
+    ]
+  }
+}
+```
+
+## 打包图片
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset', // 自动选择资源处理方式（inline 或 resource）
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024 // 小于 8KB 转 base64
+          }
+        },
+        generator: {
+          filename: 'images/[name].[contenthash][ext]'
+        }
+      }
+    ]
+  }
+};
+
+```
+
+### ✅ 为什么要用 Webpack 来打包图片？
+
+### ✅ 传统方式的问题
+
+- 图片放在 `/img/` 目录，手动写 `<img src="./img/logo.png">`
+- JS/CSS 文件里图片路径易错
+- 不能做 hash 命名（缓存优化）
+- 无法统一压缩、优化、转 base64
+
+### ✅ Webpack 的优势
+
+- 📦 图片可以像模块一样被 `import` 使用
+- 🎯 支持按需打包、压缩、改名（hash）
+- 🧾 自动处理路径、避免 404
+- 🖼️ 小图自动转为 base64 减少请求
+
+## splitChunks
+
+`splitChunks` 是 `webpack` 用于优化代码体积、提升加载性能的配置项，它的主要作用是 **提取重复模块，进行代码分割（code splitting）**，代码分割=按需加载
+
+```javascript
+module.exports = {
+  mode: 'production',
+  entry: {
+    home: './src/home.js',
+    about: './src/about.js'
+  },
+  output: {
+    filename: '[name].[contenthash].js',
+    path: __dirname + '/dist',
+    clean: true
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all', // 对同步和异步代码都分割
+      minSize: 20000, // 最小大小，超过才会分割（单位字节）
+      minChunks: 1, // 模块被引入次数大于等于 1 时会分割
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/, // 匹配 node_modules
+          name: 'vendors',
+          chunks: 'all',
+          priority: -10
+        },
+        common: {
+          minChunks: 2, // 被至少两个入口引用
+          name: 'common',
+          priority: -20,
+          reuseExistingChunk: true // 如果已经存在则复用
+        }
+      }
+    }
+  }
+};
+
+```
 
 
 
