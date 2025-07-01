@@ -14,7 +14,11 @@
 
 `cmd + shift +k`删除当前行
 
+`shift+opt+↓`快速复制一行
+
 `ul.li*5>a[href=#]>i.iconfont+{标签内容}`
+
+`shift+opt+F`格式化
 
 ## Typora快捷键
 
@@ -301,8 +305,9 @@ background-attachment: fixed;
 margin布局陷阱
 垂直上会合并取最大值，水平上不会
 子元素margin-top会穿透父元素
-margin:auto，作用在块元素且有宽度，inline无效
+margin:0 auto，作用在块元素且有宽度，inline无效
 flex布局中，margin:auto,会自动变成可以拉伸的弹簧，自动把元素推到两边或中间
+text-align:center，只针对行内元素和，inline-block元素有效
 
 如果父元素没有设置 position（relative/absolute/fixed/sticky），子元素的 z-index 是不会生效的。
 ~~~
@@ -794,7 +799,7 @@ Flexbox 和 Grid 布局
    2. 使用`<i>/<span>`等标签通过类名引入字体图标文件，引用图标
    3. 通过类名选择器选择，通过`font-size、color`等属性设置图标大小
 
-### 
+
 
 ## CSS3部分
 
@@ -876,6 +881,37 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 `position:relative;top:10px;`自己小范围移动
 
 `cursor:pointer;`鼠标变小手
+
+# 移动web
+
+## 平面转换
+
+`transform:translate(X轴移动距离，Y轴移动距离)`一个值的时候，默认X轴
+
+## 定位居中
+
+第一种,需要自己计算盒子的大小的一半
+
+```
+position:absolute;
+left:50%;
+right:50%;
+margin-left:-100px;
+margin-top:-200px;
+height:400px;
+width:200px;
+```
+
+第二种，自动计算
+
+```
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%) //百分比都是基于盒子尺寸
+```
+
+
 
 
 
