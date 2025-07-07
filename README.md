@@ -884,7 +884,7 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 
 # 移动web
 
-## 平面转换
+## 平移
 
 `transform:translate(X轴移动距离，Y轴移动距离)`一个值的时候，默认X轴
 
@@ -911,7 +911,61 @@ top:50%;
 transform:translate(-50%,-50%) //百分比都是基于盒子尺寸
 ```
 
+## 旋转
 
+`transform:rotate`
+
+## 转换原点
+
+`transform-origin:水平原点位置、垂直原点位置（left、top、right、bottom、center）`
+
+## 多重转换
+
+`transform:translate() rotate()`
+
+## 缩放
+
+`transform:scale()`
+
+## 倾斜
+
+`transform:skew(90deg)`
+
+## 渐变
+
+渐变是多个颜色逐渐变化的效果，一般用于设置盒子背景 
+
+分类：
+
+* 线性渐变
+
+![1681358603090](/Users/allsun/Desktop/front-end-note/README.assets/1681358603090.png)
+
+* 径向渐变
+
+![1681358608036](/Users/allsun/Desktop/front-end-note/README.assets/1681358608036.png)
+
+### 线性渐变
+
+```
+background-image: linear-gradient(
+  渐变方向,
+  颜色1 终点位置,
+  颜色2 终点位置,
+  ......
+);
+```
+
+### 径向渐变
+
+```
+background-image: radial-gradient(
+  半径 at 圆心位置,
+  颜色1 终点位置,
+  颜色2 终点位置,
+  ......
+);
+```
 
 
 
