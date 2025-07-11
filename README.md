@@ -102,9 +102,15 @@ cmd+opt+t   表格
 
 `git branch -d 分支名`合并完就删除
 
-![image-20250303103634267](README.assets/image-20250303103634267.png)
+【merge】保留分叉：
+A---B---C   (main)
+         \      \
+          D---E---F  (feature)
 
-**master原先是C5，合并了新的提交后移动到C10,但是原C5的节点有新的分支，再合并的时候会自动产生C11节点**
+【rebase】历史平铺：
+A---B---C   (main)
+             \
+              D'---E'  (feature)
 
 `git checkout 分支名`head指针切换到该分支，head指针影响暂存区和工作区的代码
 
