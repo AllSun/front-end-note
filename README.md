@@ -894,6 +894,14 @@ wrap作为公共样式，可作为全局定义，后续子界面可直接继承
 
 `transform:translate(X轴移动距离，Y轴移动距离)`一个值的时候，默认X轴
 
+`transform:translateX()`
+
+`transform:translateY()`
+
+`transform:translateZ()`
+
+`transform:translate3d()`
+
 ## 定位居中
 
 第一种,需要自己计算盒子的大小的一半
@@ -972,6 +980,219 @@ background-image: radial-gradient(
   ......
 );
 ```
+
+## 视距
+
+作用：指定了观察者与 Z=0 平面的距离，为元素添加透视效果
+
+`perspective:800-1200`
+
+![image-20250714101231200](README.assets/image-20250714101231200.png)
+
+## 动画
+
+定义
+
+```css
+/* 方式一 */
+@keyframes 动画名称 {
+  from {}
+  to {}
+}
+
+/* 方式二 */
+@keyframes 动画名称 {
+  0% {}
+  10% {}
+  ......
+  100% {}
+}
+```
+
+使用
+
+```css
+animation: 动画名称 动画花费时长;
+```
+
+## 适配相关
+
+二倍图、屏幕分辨率、逻辑分辨率、（等比适配rem、vw）、flex布局仅适配宽度
+
+视口=网页显示区域
+
+### 媒体查询
+
+条件成立，执行相关CSS
+
+```css
+@media (width:320px) {
+  html {
+    background-color: green;
+  }
+}
+```
+
+### 媒体查询-完整写法
+
+![1682668186585](README.assets/1682668186585.png)
+
+#### 关键词 / 逻辑操作符
+
+* and
+* only
+* not
+
+#### 媒体类型
+
+媒体类型用来区分设备类型
+
+* screen：屏幕设备
+* 打印预览：print
+* 阅读器：speech
+* 不区分类型：all
+
+#### 媒体特性
+
+* 视口宽高：width / height
+* 视口最大宽高：max-width ；max-height
+* 视口最小宽高：min-width；min-height
+* 屏幕方向：orientation
+  * protrait：竖屏
+  * landscape：横屏
+
+### 媒体查询-外部CSS
+
+![1682668446411](README.assets/1682668446411.png)
+
+### rem
+
+网页分成10等份
+
+**动态计算rem**
+
+```javascript
+
+(function () {
+  const setRem = () => {
+    const html = document.documentElement;
+    const width = html.clientWidth;
+    html.style.fontSize = (width / 10) + 'px'; // 1rem = 视口宽度 / 10
+  };
+
+  setRem();
+  window.addEventListener('resize', setRem);
+})();
+
+```
+
+**使用**
+
+```css
+.box {
+  width: 3rem;   /* 3/10 屏宽 */
+  height: 2rem;  /* 2/10 屏高 */
+  font-size: 0.5rem; /* 根据 html 设置动态缩放 */
+}
+
+```
+
+## less
+
+Less是一个CSS预处理器, Less文件后缀是.less。扩充了 CSS 语言, 使 CSS 具备一定的逻辑性、计算能力
+
+注意：浏览器不识别 Less 代码，目前阶段，网页要引入对应的 CSS 文件
+
+VS Code 插件：Easy LESS，保存 less文件后自动生成对应的 CSS 文件
+
+![1681811545628](README.assets/1681811545628.png)
+
+### 注释
+
+* 单行注释
+  * 语法：// 注释内容
+  * 快捷键：ctrl + /
+* 块注释
+  * 语法：/* 注释内容 */
+  * 快捷键： Shift + Alt + A
+
+### 运算
+
+* 加、减、乘直接书写计算表达式
+* 除法需要添加 小括号 或 .
+* 表达式存在多个单位以第一个单位为准
+
+![1681811616094](README.assets/1681811616094.png)
+
+### 嵌套
+
+作用：快速生成后代选择器
+
+![1681811640347](README.assets/1681811640347.png)
+
+提示：用 & 表示当前选择器，不会生成后代选择器，通常配合伪类或伪元素使用
+
+![1681811659709](README.assets/1681811659709.png)
+
+### 变量
+
+概念：容器，存储数据
+
+作用：存储数据，方便使用和修改
+
+语法：
+
+* 定义变量：@变量名: 数据; 
+* 使用变量：CSS属性：@变量名;
+
+```less
+// 定义变量
+@myColor: pink;
+// 使用变量
+.box {
+  color: @myColor;
+}
+a {
+  color: @myColor;
+}
+```
+
+### 导入
+
+作用：导入 less 公共样式文件
+
+语法：导入: @import “文件路径”;
+
+提示：如果是 less 文件可以省略后缀
+
+```less
+@import './base.less';
+@import './common';
+```
+
+### 导出
+
+写法：在 less 文件的第一行添加 // out: 存储URL
+
+提示：文件夹名称后面添加 /
+
+```less
+// out: ./index.css
+// out: ./css/
+```
+
+### 禁止导出
+
+写法：在 less 文件第一行添加:  // out: false 
+
+![1681811772496](README.assets/1681811772496.png)
+
+## vw和vh基本使用
+
+vw和vh是相对单位，相对视口尺寸计算结果，经常2个搭配一起用
+
+* vw：viewport width（1vw = 1/100视口宽度 ）
+* vh：lviewport height ( 1vh = 1/100视口高度 )
 
 
 
