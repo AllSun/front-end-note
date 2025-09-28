@@ -1202,9 +1202,9 @@ vw和vh是相对单位，相对视口尺寸计算结果，经常2个搭配一起
 
 **模块内的属性和函数都是私有的，如果对外使用，需要使用标准语法导出和导入才可以，而这个标准叫 CommonJS 标准**
 
-![image-20250610221443580](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221443580.png)
+![image-20250610221443580](README.assets/image-20250610221443580-9037269.png)
 
-![image-20250610221504300](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221504300.png)
+![image-20250610221504300](README.assets/image-20250610221504300-9037278.png)
 
 ### location对象
 
