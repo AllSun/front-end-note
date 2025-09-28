@@ -1477,6 +1477,53 @@ Date.now()
 - 闭包 = 内层函数 + 外层函数的变量
 - 封闭数据，实现数据私有，外部也可以访问函数内部变量
 - 闭包很有用，允许它将函数与其操作的某些数据（环境）关联起来
+- 形成类似块级作用域，内层函数可以访问外层参数或变量，外层不能访问内层
+- 延长外部函数的变量生命周期，应用如防抖、节流，变量为上一次定时器的结果
+
+```javascript
+//防抖  debounce
+function debounce(fn, delay) {
+  let timer = null;  // 外层函数的变量（被闭包延长生命周期）
+
+  return function(...args) {  // 内层函数形成闭包
+    clearTimeout(timer);      // 清除上一次的定时器
+    timer = setTimeout(() => {
+      fn.apply(this, args);   // 延迟执行
+    }, delay);
+  };
+}
+
+// 使用：输入框防抖
+const onInput = debounce((e) => {
+  console.log("搜索内容：", e.target.value);
+}, 500);
+
+document.querySelector("input").addEventListener("input", onInput);
+
+
+//节流  throttle
+function throttle(fn, delay) {
+  let lastTime = 0; // 外层函数的变量
+
+  return function(...args) {  // 内层函数形成闭包
+    const now = Date.now();
+    if (now - lastTime >= delay) {
+      fn.apply(this, args);
+      lastTime = now; // 更新
+    }
+  };
+}
+
+// 使用：滚动节流  
+const onScroll = throttle(() => {
+  console.log("滚动了");
+}, 1000);
+
+window.addEventListener("scroll", onScroll);
+
+```
+
+
 
 问题：
 
