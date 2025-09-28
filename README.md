@@ -953,11 +953,11 @@ transform:translate(-50%,-50%) //百分比都是基于盒子尺寸
 
 * 线性渐变
 
-![1681358603090](/Users/allsun/Desktop/front-end-note/README.assets/1681358603090.png)
+![1681358603090](README.assets/1681358603090-9037733.png)
 
 * 径向渐变
 
-![1681358608036](/Users/allsun/Desktop/front-end-note/README.assets/1681358608036.png)
+![1681358608036](README.assets/1681358608036-9037737.png)
 
 ### 线性渐变
 
@@ -1247,11 +1247,11 @@ vw和vh是相对单位，相对视口尺寸计算结果，经常2个搭配一起
 
 ### history对象
 
-![image-20250610222752200](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610222752200.png)
+![image-20250610222752200](README.assets/image-20250610222752200-9037708.png)
 
 ### localStorage对象、sessionStorage对象
 
-![image-20250610224854227](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610224854227.png)
+![image-20250610224854227](README.assets/image-20250610224854227-9037711.png)
 
 ## 一些重点
 
@@ -1399,7 +1399,7 @@ buttons[i].addEventListener('click', function () {
 
 正则表达式
 
-![image-20250610221257703](/Users/allsun/Desktop/front-end-note/README.assets/image-20250610221257703.png)
+![image-20250610221257703](README.assets/image-20250610221257703-9037682.png)
 
 ## 事件
 
@@ -1961,7 +1961,7 @@ p.then(result => {
 
 ### Promise对象的三个状态：pending/fulfilled/reject
 
-![image-20250616231753832](/Users/allsun/Desktop/front-end-note/README.assets/image-20250616231753832.png)
+![image-20250616231753832](README.assets/image-20250616231753832-9037789.png)
 
 ## Promise.all
 
