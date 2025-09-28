@@ -1255,6 +1255,14 @@ vw和vh是相对单位，相对视口尺寸计算结果，经常2个搭配一起
 
 ## 一些重点
 
+判断数组或对象
+
+```javascript
+Object.prototype.toString.call(对象) === '[object 数据类型]'
+```
+
+
+
 隐式转换
 
 arr = []  这个是数组  push   unshift  pop shift  splice  操作原数组 ，map、join、reduce、filter
@@ -1429,6 +1437,8 @@ e.stopPropagation
 >
 > 微任务 Promise.then
 
+![b55703274c247cad227891293463f097](README.assets/b55703274c247cad227891293463f097.jpg)
+
 ## 日期对象
 
 ```javascript
@@ -1600,6 +1610,24 @@ fn()
 
 箭头函数中的 `this` 始终指向它被定义时的外部作用域中的 `this`
 
+```javascript
+var obj = {
+  say: function() {
+    var f1 = () => { console.log(this); }
+    f1();
+  },
+  pro: {
+    getPro: () => { console.log(this); }
+  }
+}
+
+var o = obj.say;
+o();              //windows
+obj.say();        //obj
+obj.pro.getPro(); // windows,箭头函数不是看谁调用，定义在对象的pro属性，对象没有作用域，指向windows
+
+```
+
 词法作用域是指作用域是在函数定义时确定的，而不是在函数调用时确定的。箭头函数使用词法作用域来解析 `this`，而传统函数使用动态作用域解析 `this`
 
 - **箭头函数中的 `this`** 是在定义时确定的，继承自其外部作用域。
@@ -1761,7 +1789,7 @@ Man.prototype.Swimming = function (){}
 const allsun = new Man('allsun',30)
 ```
 
-### 原型链
+### 原型链,实现继承
 
 基于原型对象的继承使得不同构造函数的原型对象关联在一起，并且这种关联的关系是一种链状的结构，我们将原型对象的链状结构关系称为原型链
 
@@ -1769,9 +1797,13 @@ const allsun = new Man('allsun',30)
 
 ![67679338869](README.assets/1676793388695.png)
 
+![8f0d046ec2a508fff756b5a97285f41b](README.assets/8f0d046ec2a508fff756b5a97285f41b.jpg)
+
 ## 深浅拷贝
 
 > 浅拷贝只复制一层属性。**如果属性是引用类型（对象、数组），拷贝的是“引用”**，不是实际内容。
+>
+> 栈指向堆，赋值则为指向同一个堆，浅拷贝则为指向新的一个堆
 
 ```javascript
 const obj1 = {
@@ -1871,10 +1903,14 @@ console.log(obj1.info.age);  // 20 （引用类型共用）
        console.log(obj)
    ```
 
+   ### 手写call
+
+   ![c282863fabf9d1dfdc88469eca01183e](README.assets/c282863fabf9d1dfdc88469eca01183e.jpg)
+
    # 防抖节流
-
+   
    debounce
-
+   
    ```javascript
    function debounce(fn, delay) {
      let timer = null;
@@ -1886,9 +1922,9 @@ console.log(obj1.info.age);  // 20 （引用类型共用）
      };
    }
    ```
-
+   
    throttle
-
+   
    ```javascript
    function throttle(fn, delay) {
      let lastTime = 0;
@@ -1904,9 +1940,9 @@ console.log(obj1.info.age);  // 20 （引用类型共用）
      console.log('滚动中...', Date.now());
    }, 200));
    ```
-
    
-
+   
+   
    ![img](README.assets/u=1597464337,4211360165&fm=253&fmt=auto&app=138&f=JPEG.jpeg)
 
 # AJAX和Axios
