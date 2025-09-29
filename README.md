@@ -1255,7 +1255,7 @@ vw和vh是相对单位，相对视口尺寸计算结果，经常2个搭配一起
 
 ## 一些重点
 
-判断数组或对象
+#### 判断数组或对象
 
 ```javascript
 Object.prototype.toString.call(对象) === '[object 数据类型]'
@@ -1263,13 +1263,21 @@ Object.prototype.toString.call(对象) === '[object 数据类型]'
 
 
 
-隐式转换
+#### 隐式转换
+
+```javascript
+NaN 不等于自己
+[] == ![] ,优先计算！[],逻辑非中任何对象都是true , 则演变为 [] == 0 ,[].toString()-> ”“， ”“==0，Number("")->0,0 == 0,输出true
+```
+
+
 
 arr = []  这个是数组  push   unshift  pop shift  splice  操作原数组 ，map、join、reduce、filter
 
 ```javascript
 const newArray = oldArray.map(function(element, index, array) {
   // 返回新的元素
+  //return element*2  或者其他操作
 });
 
 const numbers = [1, 2, 3, 4];
@@ -1277,18 +1285,22 @@ const sum = numbers.reduce((acc, cur) => acc + cur, 0);
 
 const newArray = arr.filter(function(element, index, array) {
   // 返回 true 或 false，决定是否保留该元素
+  // return element > 0
 });
 
 forEach(function(element,index){
   
 })
+
+map、reduce、filter、forEach  都可以使用箭头函数作为简写
+
 join reverse concat  every  sort  
 toFixed()   //保留多少位小数
 ```
 
 obj = {}  这个是对象
 
-set =()
+set =()，成员值唯一
 
 > 如果函数内部，变量没有声明，直接赋值，也当全局变量看，但是强烈不推荐
 >
